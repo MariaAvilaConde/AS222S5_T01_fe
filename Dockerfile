@@ -1,17 +1,21 @@
-FROM node:16
+# Usar una imagen base con Node.js 18+
+FROM node:18
 
-RUN mkdir -p /app
-
+# Crear y configurar el directorio de trabajo
 WORKDIR /app
 
-COPY package*.json /app
+# Copiar archivos del proyecto al contenedor
+COPY package*.json ./
+COPY . .
 
+# Instalar dependencias
 RUN npm install
 
-COPY . /app
+# Construir la aplicación en modo producción
+RUN npm run build --configuration=production
 
-RUN npm run build --prod
-
+# Exponer el puerto
 EXPOSE 4200
 
-ENTRYPOINT ["npm", "start"]
+# Comando por defecto para iniciar la aplicación (opcional)
+CMD ["npm", "start"]
