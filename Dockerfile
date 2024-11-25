@@ -1,23 +1,29 @@
-# Usar una imagen base con Node.js 18+
-FROM node:18
+# Imagen base de Node.js
+FROM node:18-alpine as build
 
-# Crear y configurar el directorio de trabajo
+# Establece el directorio de trabajo
 WORKDIR /app
 
-# Copiar archivos de dependencias primero (mejor caché)
+# Copia los archivos del proyecto
 COPY package*.json ./
 
-# Instalar dependencias
+# Instala las dependencias
 RUN npm install
 
-# Copiar el resto de los archivos del proyecto
+# Copia el resto de los archivos
 COPY . .
 
-# Construir la aplicación en modo producción
+# Construye la aplicación Angular en modo producción
 RUN npm run build --configuration=production
 
-# Exponer el puerto
-EXPOSE 4200
+# Usa una imagen de servidor (por ejemplo, Nginx) para servir la app
+FROM nginx:alpine
 
-# Comando por defecto para iniciar la aplicación (opcional)
-CMD ["npm", "start"]
+# Copia los archivos compilados al contenedor de Nginx
+COPY --from=build /app/dist/OpenAi /usr/share/nginx/html
+
+# Expone el puerto
+EXPOSE 80
+
+# Comando para ejecutar Nginx
+CMD ["nginx", "-g", "daemon off;"]
