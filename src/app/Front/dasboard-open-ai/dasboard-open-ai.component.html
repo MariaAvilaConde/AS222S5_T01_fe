@@ -1,0 +1,78 @@
+<div class="chat-wrapper">
+  <mat-toolbar color="primary" class="chat-toolbar">
+    <mat-icon>chat</mat-icon>
+    <span>Azure OpenAI Chat</span>
+    <span class="spacer"></span>
+    <button mat-icon-button>
+      <mat-icon>settings</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <!-- Current Conversation Section -->
+  <div class="chat-container">
+    <div #messagesContainer class="messages" id="chat-messages">
+      <div class="message-wrapper" *ngFor="let mensaje of conversacionActual">
+        <div class="message" [ngClass]="mensaje.tipo">
+          <div class="message-header">
+            <mat-icon>{{ mensaje.tipo === 'usuario' ? 'person' : 'smart_toy' }}</mat-icon>
+            <span class="timestamp">{{ mensaje.timestamp | date:'shortTime' }}</span>
+          </div>
+          <mat-card class="message-card">
+            <mat-card-content>{{ mensaje.texto }}</mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-container">
+      <mat-card class="input-card">
+        <mat-card-content>
+          <mat-form-field appearance="outline" class="input-field">
+            <mat-label>Escribe tu pregunta</mat-label>
+            <textarea matInput [formControl]="consulta" (keydown)="handleEnter($event)" rows="2"
+              placeholder="¿Cómo puedo ayudarte hoy?"></textarea>
+            <mat-hint>Presiona Enter para enviar o Shift + Enter para nueva línea</mat-hint>
+          </mat-form-field>
+
+          <div class="actions">
+            <button mat-fab color="primary" [disabled]="!consulta.value?.trim() || isLoading"
+              (click)="enviarConsulta()">
+              <mat-icon>{{ isLoading ? 'hourglass_empty' : 'send' }}</mat-icon>
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- History Table Section -->
+  <div class="history-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Historial de Respuestas IA (últimas {{limiteMostrados}} respuestas)</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <table mat-table [dataSource]="historialRespuestas.slice(0, limiteMostrados)" class="mat-elevation-z0">
+          <ng-container matColumnDef="timestamp">
+            <th mat-header-cell *matHeaderCellDef> Fecha </th>
+            <td mat-cell *matCellDef="let respuesta"> {{respuesta.timestamp | date:'short'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="texto">
+            <th mat-header-cell *matHeaderCellDef> Respuesta </th>
+            <td mat-cell *matCellDef="let respuesta"> {{respuesta.texto}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="['timestamp', 'texto']"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['timestamp', 'texto'];"></tr>
+        </table>
+
+        <div class="load-more-container" *ngIf="historialRespuestas.length > limiteMostrados">
+          <button mat-button color="primary" (click)="cargarMasRespuestas()">
+            Cargar más respuestas
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
