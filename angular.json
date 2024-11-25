@@ -17,6 +17,7 @@
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -52,7 +53,6 @@
             },
             "development": {
               "optimization": false,
-              "extractLicenses": false,
               "sourceMap": true,
               "browserTarget": "front:build:development"
             }
