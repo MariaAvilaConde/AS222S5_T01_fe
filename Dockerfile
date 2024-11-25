@@ -1,19 +1,17 @@
-FROM node:18-alpine AS build
+FROM node:14
+
+RUN mkdir -p /app
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package*.json /app
+
 RUN npm install
 
-COPY . .
+COPY . /app
 
-RUN npm install -g @angular/cli@latest
-RUN npm run build --configuration=production
+RUN npm run 
 
-FROM nginx:alpine
+EXPOSE 4200
 
-COPY --from=build /app/dist/TheGame /usr/share/nginx/html
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["npm", "start"]
