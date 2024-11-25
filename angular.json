@@ -66,33 +66,34 @@
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
                 }
-              ]
+              ],
+              "browser": "chrome"  // Asegurando que la propiedad `browser` esté presente
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "browser": "chrome"  // Asegurando que la propiedad `browser` esté presente
             }
           },
           "defaultConfiguration": "production"
         },
-"serve": {
-  "builder": "@angular-devkit/build-angular:dev-server",
-  "options": {
-    "host": "0.0.0.0",
-    "port": 4200
-  },
-  "configurations": {
-    "production": {
-      "browserTarget": "TheGame:build:production"
-    },
-    "development": {
-      "browserTarget": "TheGame:build:development"
-    }
-  },
-  "defaultConfiguration": "development"
-}
-
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "host": "0.0.0.0",
+            "port": 4200
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "TheGame:build:production"
+            },
+            "development": {
+              "browserTarget": "TheGame:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
