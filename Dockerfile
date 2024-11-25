@@ -4,12 +4,14 @@ FROM node:18
 # Crear y configurar el directorio de trabajo
 WORKDIR /app
 
-# Copiar archivos del proyecto al contenedor
+# Copiar archivos de dependencias primero (mejor caché)
 COPY package*.json ./
-COPY . .
 
 # Instalar dependencias
 RUN npm install
+
+# Copiar el resto de los archivos del proyecto
+COPY . .
 
 # Construir la aplicación en modo producción
 RUN npm run build --configuration=production
